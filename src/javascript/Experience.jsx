@@ -6,9 +6,21 @@ import {
 } from "@react-three/drei";
 import { useControls, button } from "leva";
 import { Perf } from "r3f-perf";
+import { Physics } from "@react-three/rapier";
+import Lights from "./World/Lights";
 import Floor from "./World/Floor";
+import { Level } from "./Components/Level";
+import Player from "./Components/Player";
+import useGame from "./stores/useGame";
 
 export default function Experience() {
+  let blocksCount = useGame((state) => {
+    return state.blocksCount;
+  });
+  let blockSeed = useGame((state) => {
+    return state.blockSeed;
+  });
+
   let test = () => {
     console.log("tick");
     console.log("tack");
@@ -51,30 +63,24 @@ export default function Experience() {
     <>
       {perfVisible ? <Perf position="top-left" /> : null}
       <OrbitControls makeDefault />
+      <color args={["#000000"]} attach="background" />
 
-      <directionalLight position={[1, 2, 3]} intensity={4.5} />
-      <ambientLight intensity={1.5} />
+      <Physics debug={true}>
+        <Lights />
+        <mesh castShadow position={[position.x, position.y, 0]} visible={visible}>
+          <sphereGeometry />
+          <meshStandardMaterial color={color} />
+        </mesh>
 
-      <Environment background>
-        <color args={["#000000"]} attach="background" />
-        {/* <Lightformer position-z={-5} scale={10} />
-        <mesh position-y={5} scale={10} rotation={[90, 0, 0]}>
-          <planeGeometry />
-          <meshBasicMaterial color={[10, 1, 0]} />
-        </mesh> */}
-      </Environment>
+        <mesh position-x={2} scale={scale}>
+          <boxGeometry />
+          <meshStandardMaterial color="mediumpurple" />
+        </mesh>
 
-      <mesh position={[position.x, position.y, 0]} visible={visible}>
-        <sphereGeometry />
-        <meshStandardMaterial color={color} />
-      </mesh>
-
-      <mesh position-x={2} scale={scale}>
-        <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
-      </mesh>
-
-      <Floor />
+        <Level count={blocksCount} seed={blockSeed} />
+        <Player />
+        <Floor />
+      </Physics>
     </>
   );
 }
