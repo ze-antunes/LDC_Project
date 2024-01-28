@@ -103,21 +103,23 @@ const Player = () => {
         // Camera
         let bodyPosition = body.current.translation()
         let cameraPosition = new THREE.Vector3()
+        let cameraTarget = new THREE.Vector3()
+        
         if (orbitalControls == false) {
             cameraPosition.copy(bodyPosition)
             cameraPosition.z += 3.5
             cameraPosition.y += 2.35
 
-            let cameraTarget = new THREE.Vector3()
             cameraTarget.copy(bodyPosition)
             cameraTarget.y += 0.25
 
             smoothCameraPosition.lerp(cameraPosition, 5 * delta)
-            smoothCameraTarget.lerp(cameraTarget, 5 * delta)
-
+            
             state.camera.position.copy(smoothCameraPosition)
-            state.camera.lookAt(smoothCameraTarget)
         }
+
+        smoothCameraTarget.lerp(cameraTarget, 5 * delta)
+        state.camera.lookAt(smoothCameraTarget)
 
             //Phases
             if (bodyPosition.z < -(blocksCount * 4 + 2))
