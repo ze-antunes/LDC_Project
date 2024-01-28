@@ -1,27 +1,34 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { forwardRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { RedFormat, DataTexture, Color, Vector3 } from "three";
-// import * as SimpleShader from "./SimpleShader";
-// import { ToonShader } from "./ToonShader";
+import { useFrame } from "@react-three/fiber";
 import { StyleShader } from "./StyleShader";
 
-export const Wars = ({ scale = 0.1, position = [0, 0.5, 0], colors = [], ref }) => {
-    const [active, setActive] = useState(false);
-    const { nodes, materials } = useGLTF("/trees.glb");
+export let Wars = ({ scale = 0.1, position = [0, 0.5, 0], colors = [] }) => {
+    let [active, setActive] = useState(false);
+    let { nodes, materials } = useGLTF("/trees.glb");
 
-    const toneMap = useMemo(() => {
-        const format = RedFormat;
-        const colors = new Uint8Array(4);
+    let refObj = useRef(null);
+
+    useFrame(() => {
+        let { current: group } = refObj
+        if (group) {
+            group.rotation.x = group.rotation.y += 0.01;
+        }
+    });
+
+    let toneMap = useMemo(() => {
+        let format = RedFormat;
+        let colors = new Uint8Array(4);
         for (let c = 0; c <= colors.length; c++) {
             colors[c] = (c / colors.length) * 256;
         }
-        const gradientMap = new DataTexture(colors, colors.length, 1, format);
+        let gradientMap = new DataTexture(colors, colors.length, 1, format);
         gradientMap.needsUpdate = true;
         return gradientMap;
     }, []);
 
-    const uniforms = useMemo(() => {
+    let uniforms = useMemo(() => {
         return {
             // ...ToonShader.uniforms,
             // uBaseColor: { value: new Color("#076838") },
@@ -49,7 +56,7 @@ export const Wars = ({ scale = 0.1, position = [0, 0.5, 0], colors = [], ref }) 
         //     <meshStandardMaterial color="mediumpurple" />
         // </mesh>
 
-        <group ref={ref} position={position} scale={scale} dispose={null}>
+        <group ref={refObj} position={position} scale={scale} dispose={null}>
             <mesh
                 castShadow
                 receiveShadow

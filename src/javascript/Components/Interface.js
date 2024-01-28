@@ -18,9 +18,6 @@ const Interface = () => {
 
     return (
         <div className="interface">
-            {/* Restart  */}
-            {phase === 'ended' && <div className="restart" onClick={restart}>Restart</div>}
-
             {/* Controls */}
             <div className="controls">
                 <div className="raw">
