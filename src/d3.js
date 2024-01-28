@@ -6,9 +6,9 @@ let widthMap = window.innerWidth * 0.25,
     heightMap = window.innerHeight * 0.3;
 
 let projectionMap = d3.geoMercator()
-    .center([50, 10]) //long and lat starting position
-    .scale(150) //starting zoom position
-    .rotate([10, 0]); //where world split occurs
+    .center([70, 15]) // Centering on Europe, long and lat
+    .scale(250) // Adjust the scale for zoom level
+    .rotate([-10, 0]); // Rotate to fit Europe better
 
 let svgMap = d3
     .select("body")
@@ -20,35 +20,6 @@ let svgMap = d3
 let pathMap = d3.geoPath().projection(projectionMap);
 
 let gMap = svgMap.append("g");
-
-// load and display the world and locations
-d3.json(
-    "https://gist.githubusercontent.com/d3noob/5193723/raw/world-110m2.json"
-).then(function (topology) {
-    let world = gMap
-        .selectAll("path")
-        .data(topojson.feature(topology, topology.objects.countries).features)
-        .enter()
-        .append("path")
-        .attr("d", pathMap)
-        .attr("class", "countries");
-
-    // Zoom and pan functionality
-    let zoomMap = d3.zoom().on("zoom", function (event) {
-        gMap.attr(
-            "transform",
-            "translate(" +
-            event.transform.x +
-            "," +
-            event.transform.y +
-            ")scale(" +
-            event.transform.k +
-            ")"
-        );
-        gMap.selectAll("path").attr("d", pathMap);
-    });
-    svgMap.call(zoomMap);
-});
 
 let handleRequest = (data) => {
     // console.log(data)
@@ -76,10 +47,45 @@ let handleRequest = (data) => {
         .attr("class", "location-point")
         .attr("cx", function (d) { return projectionMap([d.long, d.lat])[0] })
         .attr("cy", function (d) { return projectionMap([d.long, d.lat])[1] })
-        .attr("r", 1)
+        .attr("r", 5)
 
     createTimeline(dates)
 };
+
+// load and display the world and locations
+d3.json(
+    "https://gist.githubusercontent.com/d3noob/5193723/raw/world-110m2.json"
+).then(function (topology) {
+    let world = gMap
+        .selectAll("path")
+        .data(topojson.feature(topology, topology.objects.countries).features)
+        .enter()
+        .append("path")
+        .attr("d", pathMap)
+        .attr("class", "countries");
+
+    // Zoom and pan functionality
+    let zoomMap = d3.zoom().on("zoom", function (event) {
+        // console.log(event.transform.k, locations._groups[0][0].r)
+
+        locations
+            .transition()
+            .attr("r", (5 / event.transform.k) + 0.3)
+        
+        gMap.attr(
+            "transform",
+            "translate(" +
+            event.transform.x +
+            "," +
+            event.transform.y +
+            ")scale(" +
+            event.transform.k +
+            ")"
+        );
+        gMap.selectAll("path").attr("d", pathMap);
+    });
+    svgMap.call(zoomMap);
+});
 
 function fractionalYearToDate(fractionalYear) {
     // Reference date
@@ -235,7 +241,7 @@ let createTimeline = (data) => {
         .append("circle")
         .attr("class", "indicator")
         .attr("r", 6)
-        .style("fill", "red");
+        .style("fill", "grey");
 
     // Add circles to represent data points
     let dataPoints = g
@@ -299,7 +305,7 @@ let createTimeline = (data) => {
 
 
 // Set up animation transition
-let transitionDuration = 2000; // Duration for each transition in milliseconds
+let transitionDuration = 5000; // Duration for each transition in milliseconds
 
 // ------ Request Data
 d3.csv(file)

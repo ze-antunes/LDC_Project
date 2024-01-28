@@ -43,8 +43,8 @@ body,
 
 .controls {
   position: absolute;
-  bottom: 25%;
-  right: -5%;
+  bottom: 20%;
+  right: -7%;
   width: 25%;
 }
 
@@ -73,7 +73,7 @@ body,
 .countries {
   stroke: white;
   stroke-width: 0.25px;
-  fill: #778899;
+  fill: #505050;
 }
 
 .hidden {
@@ -93,7 +93,7 @@ div.tooltip {
 
 .timeline {
   position: absolute;
-  bottom: 5%;
+  bottom: 3%;
   left: 0;
   user-select: none;
   pointer-events: none;
@@ -107,7 +107,7 @@ div.tooltip {
 }
 
 .data-point {
-  fill: blue;
+  fill: rgb(255, 0, 0);
   opacity: 0;
 }
 
@@ -118,7 +118,7 @@ div.tooltip {
 
 .svgMap {
   position: absolute;
-  top: 2%;
+  bottom: 20%;
   left: 1%;
   background: #000000cc;
   border: 2px solid #ffffff;

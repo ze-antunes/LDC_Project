@@ -1,27 +1,21 @@
 import { useRef, useState, useMemo, useEffect } from 'react'
 import * as THREE from 'three'
 import { RigidBody, CuboidCollider } from '@react-three/rapier'
-import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import CSVReader from 'react-csv-reader';
-import { Wars } from '../Components/Wars'
+import { Wars } from '../Components/Wars/WarComponent'
+import { Color } from "three";
 
-let boxGeometry = new THREE.BoxGeometry(1, 1, 1)
-let floor1Material = new THREE.MeshStandardMaterial({ color: "limegreen" })
-let wallMaterial = new THREE.MeshStandardMaterial({ color: "slategrey" })
+let wallMaterial = new THREE.MeshStandardMaterial({ color: "grey" })
 
 function Map() {
     const [csvData, setCSVData] = useState(null);
 
     useEffect(() => {
         let file = "./WW2_LocationData_Clean - GeoBattleData_YZ.csv";
-
-
         let handleRequest = (data) => {
             // console.log(data) 
             setCSVData(data);
         };
-
         // ------ Request Data
         d3.csv(file)
             .then(handleRequest);
@@ -31,7 +25,12 @@ function Map() {
         <>
             <Countries position={[0, 0, -4]} />
             {csvData && csvData.map((war, index) => {
-                return <Wars key={index} position={[war.long, 0.5, war.lat / 100]}/>
+                return <Wars colors={[
+                    new Color("#427062").convertLinearToSRGB(),
+                    new Color("#33594e").convertLinearToSRGB(),
+                    new Color("#234549").convertLinearToSRGB(),
+                    new Color("#1e363f").convertLinearToSRGB()
+                ]} key={index} position={[war.long, 0.5, war.lat / 100]} />
             })}
         </>
     )
@@ -523,10 +522,11 @@ export function Countries({ position = [0, 0, 0] }) {
                 mesh.castShadow = true;
             });
             return (
-                <RigidBody key={index} type='fixed' colliders='hull' position={[-29, -0.1, -8]} restitution={0.2} friction={0}>
-                    <primitive object={country.scene} scale={[100, 20, 100]} material={wallMaterial} castShadow receiveShadow />
-                    <meshStandardMaterial flatShading color='mediumpurple' />
-                </RigidBody>
+                <group key={index}>
+                    <RigidBody type='fixed' colliders='hull' position={[-29, -0.1, -8]} restitution={0.2} friction={0}>
+                        <primitive object={country.scene} scale={[100, 20, 100]} material={wallMaterial} castShadow receiveShadow />
+                    </RigidBody>
+                </group>
             )
         });
     }

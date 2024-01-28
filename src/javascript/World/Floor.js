@@ -14,11 +14,11 @@ function Floor() {
     return (
         <RigidBody type="fixed" restitution={0.2} friction={0}>
             <group position={[0, 0, 0]}>
-                <mesh className="floor" geometry={boxGeometry} material={floor1Material} position={[0, -0.1, 0]} scale={[65, 0.2, 35]} receiveShadow />
+                <mesh className="floor" geometry={boxGeometry} material={floor1Material} position={[0, -0.1, 0]} scale={[65, 0.2, 35]} castShadow receiveShadow />
             </group>
 
             <CuboidCollider
-                args={[100, 0.1, 100]}
+                args={[32.5, 0.1, 17.5]}
                 position={[0, - 0.1, - (length * 2) + 2]}
                 restitution={0.2}
                 friction={1}
