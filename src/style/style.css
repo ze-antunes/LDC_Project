@@ -99,7 +99,7 @@ div.tooltip {
   pointer-events: none;
   fill: none;
   overflow-x: hidden;
-  background: #00000033;
+  background: #000000cc;
   color: rgb(211, 211, 211);
   display: flex;
   align-items: center;

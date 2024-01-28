@@ -12,6 +12,7 @@ import Floor from "./World/Floor";
 import { Level } from "./Components/Level";
 import Player from "./Components/Player";
 import useGame from "./stores/useGame";
+import Map from "./World/Map";
 
 export default function Experience() {
   let blocksCount = useGame((state) => {
@@ -26,34 +27,34 @@ export default function Experience() {
     console.log("tack");
   };
 
-  let { position, color, visible, interval, clickMe } = useControls("Sphere", {
-    position: {
-      value: {
-        x: -2,
-        y: 0
-      },
-      step: 0.01,
-      joystick: "invertY"
-    },
-    color: "#ff0000",
-    visible: true,
-    interval: {
-      min: 0,
-      max: 10,
-      value: [3, 5]
-    },
-    clickMe: button(test),
-    choice: { options: [1, 2, 3] }
-  });
+  // let { position, color, visible, interval, clickMe } = useControls("Sphere", {
+  //   position: {
+  //     value: {
+  //       x: -2,
+  //       y: 0
+  //     },
+  //     step: 0.01,
+  //     joystick: "invertY"
+  //   },
+  //   color: "#ff0000",
+  //   visible: true,
+  //   interval: {
+  //     min: 0,
+  //     max: 10,
+  //     value: [3, 5]
+  //   },
+  //   clickMe: button(test),
+  //   choice: { options: [1, 2, 3] }
+  // });
 
-  let { scale } = useControls("Cube", {
-    scale: {
-      value: 1.5,
-      step: 0.01,
-      min: 0,
-      max: 5
-    }
-  });
+  // let { scale } = useControls("Cube", {
+  //   scale: {
+  //     value: 1.5,
+  //     step: 0.01,
+  //     min: 0,
+  //     max: 5
+  //   }
+  // });
 
   let { perfVisible } = useControls("Perf", {
     perfVisible: false
@@ -67,7 +68,11 @@ export default function Experience() {
 
       <Physics debug={true}>
         <Lights />
-        <mesh castShadow position={[position.x, position.y, 0]} visible={visible}>
+        {/* <mesh
+          castShadow
+          position={[position.x, position.y, 0]}
+          visible={visible}
+        >
           <sphereGeometry />
           <meshStandardMaterial color={color} />
         </mesh>
@@ -75,11 +80,12 @@ export default function Experience() {
         <mesh position-x={2} scale={scale}>
           <boxGeometry />
           <meshStandardMaterial color="mediumpurple" />
-        </mesh>
+        </mesh> */}
 
         <Level count={blocksCount} seed={blockSeed} />
         <Player />
         <Floor />
+        <Map />
       </Physics>
     </>
   );
