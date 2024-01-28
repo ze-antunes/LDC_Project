@@ -305,7 +305,7 @@ let createTimeline = (data) => {
 
 
 // Set up animation transition
-let transitionDuration = 5000; // Duration for each transition in milliseconds
+let transitionDuration = 1000; // Duration for each transition in milliseconds
 
 // ------ Request Data
 d3.csv(file)

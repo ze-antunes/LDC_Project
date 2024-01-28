@@ -10,6 +10,19 @@ let wallMaterial = new THREE.MeshStandardMaterial({ color: "grey" })
 function Map() {
     const [csvData, setCSVData] = useState(null);
 
+    function mapRange(value, inputMin, inputMax, outputMin, outputMax) {
+        // Clamp the value to the input range
+        const clampedValue = Math.min(Math.max(value, inputMin), inputMax);
+
+        // Calculate the percentage of the value within the input range
+        const percentage = (clampedValue - inputMin) / (inputMax - inputMin);
+
+        // Map the percentage to the output range
+        const outputValue = percentage * (outputMax - outputMin) + outputMin;
+
+        return outputValue;
+    }
+
     useEffect(() => {
         let file = "./WW2_LocationData_Clean - GeoBattleData_YZ.csv";
         let handleRequest = (data) => {
@@ -23,14 +36,16 @@ function Map() {
 
     return (
         <>
-            <Countries position={[0, 0, -4]} />
+            <Countries position={[1, 0, -5]} />
             {csvData && csvData.map((war, index) => {
+                let long = mapRange(war.long, -180, 180, -27, 27);
+                let lat = mapRange(war.lat, -90, 90, 13.5, -13.5);
                 return <Wars colors={[
-                    new Color("#427062").convertLinearToSRGB(),
-                    new Color("#33594e").convertLinearToSRGB(),
-                    new Color("#234549").convertLinearToSRGB(),
-                    new Color("#1e363f").convertLinearToSRGB()
-                ]} key={index} position={[war.long, 0.5, war.lat / 100]} />
+                    new Color("#F00511").convertLinearToSRGB(),
+                    new Color("#B4040C").convertLinearToSRGB(),
+                    new Color("#780208").convertLinearToSRGB(),
+                    new Color("#500105").convertLinearToSRGB()
+                ]} key={index} position={[long, 0.5, lat]} />
             })}
         </>
     )

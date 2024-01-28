@@ -7,7 +7,6 @@ import { useGLTF } from '@react-three/drei'
 import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
 
 let boxGeometry = new THREE.BoxGeometry(1, 1, 1)
-
 let floor1Material = new THREE.MeshStandardMaterial({ color: "#1C1C1C" })
 
 function Floor() {
@@ -19,7 +18,7 @@ function Floor() {
 
             <CuboidCollider
                 args={[32.5, 0.1, 17.5]}
-                position={[0, - 0.1, - (length * 2) + 2]}
+                position={[0, - 0.1, 0]}
                 restitution={0.2}
                 friction={1}
             />

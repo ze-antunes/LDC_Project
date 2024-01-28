@@ -140,7 +140,7 @@ const Player = () => {
             angularDamping={0.5}
             position={[0, 1, 0]}
         >
-            <mesh castShadow>
+            <mesh castShadow receiveShadow>
                 <icosahedronGeometry args={[0.3, 1]} />
                 <meshStandardMaterial flatShading color='mediumpurple' />
             </mesh>

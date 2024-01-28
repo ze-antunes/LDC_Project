@@ -57,7 +57,7 @@ export const Wars = ({ scale = 0.1, position = [0, 0.5, 0], colors = [], ref }) 
                 onClick={(e) => setActive(!active)}
                 geometry={nodes.Foliage.geometry}
                 material={materials["Stylized Foliage"]}
-                position={[0.33, -0.05, -0.68]}
+                position={[0, -0.05, 0]}
             >
                 {/* <meshToonMaterial gradientMap={toneMap} color={"#076838"} /> */}
                 <shaderMaterial
