@@ -4,14 +4,15 @@ import { useKeyboardControls } from "@react-three/drei";
 import { useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import useGame from '../stores/useGame'
+import { useControls } from "leva";
 
 
 const Player = () => {
 
     let body = useRef()
     let [subscribeKeys, getKeys] = useKeyboardControls()
-    let { rapier, world } = useRapier()
-    let rapierWorld = world
+    // let { rapier, world } = useRapier()
+    // let rapierWorld = world
 
     let [smoothCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10))
     let [smoothCameraTarget] = useState(() => new THREE.Vector3())
@@ -21,16 +22,21 @@ const Player = () => {
     let restart = useGame((state) => { return state.restart })
     let blocksCount = useGame((state) => { return state.blocksCount })
 
-    let jump = () => {
-        let origin = body.current.translation()
-        origin.y -= 0.31
-        let direction = { x: 0, y: -1, z: 0 }
-        let ray = new rapier.Ray(origin, direction)
-        let hit = rapierWorld.castRay(ray, 10, true)
 
-        if (hit.toi < 0.15)
-            body.current.applyImpulse({ x: 0, y: 0.5, z: 0 })
-    }
+    let { orbitalControls } = useControls("Camera", {
+        orbitalControls: false
+    });
+
+    // let jump = () => {
+    //     let origin = body.current.translation()
+    //     origin.y -= 0.31
+    //     let direction = { x: 0, y: -1, z: 0 }
+    //     let ray = new rapier.Ray(origin, direction)
+    //     let hit = rapierWorld.castRay(ray, 10, true)
+
+    //     if (hit.toi < 0.15)
+    //         body.current.applyImpulse({ x: 0, y: 0.5, z: 0 })
+    // }
 
     let reset = () => {
         body.current.setTranslation({ x: 0, y: 1, z: 0 })
@@ -57,7 +63,6 @@ const Player = () => {
 
         return () => {
             unsubscribeReset()
-            unsubscribeJump()
             unsubscribeAnyKey()
         }
     }, [])
@@ -98,26 +103,28 @@ const Player = () => {
         // Camera
         let bodyPosition = body.current.translation()
         let cameraPosition = new THREE.Vector3()
-        cameraPosition.copy(bodyPosition)
-        cameraPosition.z += 2.25
-        cameraPosition.y += 0.65
+        if (orbitalControls == false) {
+            cameraPosition.copy(bodyPosition)
+            cameraPosition.z += 3.5
+            cameraPosition.y += 2.35
 
-        let cameraTarget = new THREE.Vector3()
-        cameraTarget.copy(bodyPosition)
-        cameraTarget.y += 0.25
+            let cameraTarget = new THREE.Vector3()
+            cameraTarget.copy(bodyPosition)
+            cameraTarget.y += 0.25
 
-        smoothCameraPosition.lerp(cameraPosition, 5 * delta)
-        smoothCameraTarget.lerp(cameraTarget, 5 * delta)
+            smoothCameraPosition.lerp(cameraPosition, 5 * delta)
+            smoothCameraTarget.lerp(cameraTarget, 5 * delta)
 
-        state.camera.position.copy(smoothCameraPosition)
-        state.camera.lookAt(smoothCameraTarget)
+            state.camera.position.copy(smoothCameraPosition)
+            state.camera.lookAt(smoothCameraTarget)
+        }
 
-        //Phases
-        if (bodyPosition.z < -(blocksCount * 4 + 2))
-            end()
+            //Phases
+            if (bodyPosition.z < -(blocksCount * 4 + 2))
+                end()
 
-        if (bodyPosition.y < -4)
-            restart()
+            if (bodyPosition.y < -4)
+                restart()
     })
 
     return (

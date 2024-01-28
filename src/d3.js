@@ -2,52 +2,53 @@ let locationData;
 let locations;
 let file = "./WW2_LocationData_Clean - GeoBattleData_YZ.csv";
 
-// let widthMap = window.innerWidth,
-//     heightMap = window.innerHeight;
+let widthMap = window.innerWidth * 0.25,
+    heightMap = window.innerHeight * 0.3;
 
-// let projectionMap = d3.geoMercator()
-//     .center([50, 10]) //long and lat starting position
-//     .scale(150) //starting zoom position
-//     .rotate([10, 0]); //where world split occurs
+let projectionMap = d3.geoMercator()
+    .center([50, 10]) //long and lat starting position
+    .scale(150) //starting zoom position
+    .rotate([10, 0]); //where world split occurs
 
-// let svgMap = d3
-//     .select("mesh.floor")
-//     .append("svg")
-//     .attr("width", widthMap)
-//     .attr("height", heightMap);
+let svgMap = d3
+    .select("body")
+    .append("svg")
+    .attr("class", "svgMap")
+    .attr("width", widthMap)
+    .attr("height", heightMap);
 
-// let pathMap = d3.geoPath().projection(projectionMap);
+let pathMap = d3.geoPath().projection(projectionMap);
 
-// let gMap = svgMap.append("g");
+let gMap = svgMap.append("g");
 
-// // load and display the world and locations
-// d3.json(
-//     "https://gist.githubusercontent.com/d3noob/5193723/raw/world-110m2.json"
-// ).then(function (topology) {
-//     let world = gMap
-//         .selectAll("path")
-//         .data(topojson.feature(topology, topology.objects.countries).features)
-//         .enter()
-//         .append("path")
-//         .attr("d", pathMap)
-//         .attr("class", "countries");
+// load and display the world and locations
+d3.json(
+    "https://gist.githubusercontent.com/d3noob/5193723/raw/world-110m2.json"
+).then(function (topology) {
+    let world = gMap
+        .selectAll("path")
+        .data(topojson.feature(topology, topology.objects.countries).features)
+        .enter()
+        .append("path")
+        .attr("d", pathMap)
+        .attr("class", "countries");
 
-//     // Zoom and pan functionality
-//     let zoomMap = d3.zoom().on("zoom", function (event) {
-//         gMap.attr(
-//             "transform",
-//             "translate(" +
-//             event.transform.x +
-//             "," +
-//             event.transform.y +
-//             ")scale(" +
-//             event.transform.k +
-//             ")"
-//         );
-//         gMap.selectAll("path").attr("d", pathMap);
-//     });
-//     svgMap.call(zoomMap);
-// });
+    // Zoom and pan functionality
+    let zoomMap = d3.zoom().on("zoom", function (event) {
+        gMap.attr(
+            "transform",
+            "translate(" +
+            event.transform.x +
+            "," +
+            event.transform.y +
+            ")scale(" +
+            event.transform.k +
+            ")"
+        );
+        gMap.selectAll("path").attr("d", pathMap);
+    });
+    svgMap.call(zoomMap);
+});
 
 let handleRequest = (data) => {
     // console.log(data)
@@ -67,15 +68,15 @@ let handleRequest = (data) => {
     // console.log(dates)
 
     // add war location circles
-    // locations = gMap
-    //     .selectAll("circle")
-    //     .data(locationData)
-    //     .enter()
-    //     .append("circle")
-    //     .attr("class", "location-point")
-    //     .attr("cx", function (d) { return projectionMap([d.long, d.lat])[0] })
-    //     .attr("cy", function (d) { return projectionMap([d.long, d.lat])[1] })
-    //     .attr("r", 1)
+    locations = gMap
+        .selectAll("circle")
+        .data(locationData)
+        .enter()
+        .append("circle")
+        .attr("class", "location-point")
+        .attr("cx", function (d) { return projectionMap([d.long, d.lat])[0] })
+        .attr("cy", function (d) { return projectionMap([d.long, d.lat])[1] })
+        .attr("r", 1)
 
     createTimeline(dates)
 };
@@ -279,12 +280,12 @@ let createTimeline = (data) => {
                 return i === index ? 1 : 0;
             });
 
-        // locations
-        //     .transition()
-        //     .duration(transitionDuration)
-        //     .style("opacity", function (d, i) {
-        //         return i === index ? 1 : 0;
-        //     });
+        locations
+            .transition()
+            .duration(transitionDuration)
+            .style("opacity", function (d, i) {
+                return i === index ? 1 : 0;
+            });
 
         // Repeat the animation with a loop back to the first element
         setTimeout(function () {

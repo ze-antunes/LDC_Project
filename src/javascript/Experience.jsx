@@ -27,34 +27,34 @@ export default function Experience() {
     console.log("tack");
   };
 
-  // let { position, color, visible, interval, clickMe } = useControls("Sphere", {
-  //   position: {
-  //     value: {
-  //       x: -2,
-  //       y: 0
-  //     },
-  //     step: 0.01,
-  //     joystick: "invertY"
-  //   },
-  //   color: "#ff0000",
-  //   visible: true,
-  //   interval: {
-  //     min: 0,
-  //     max: 10,
-  //     value: [3, 5]
-  //   },
-  //   clickMe: button(test),
-  //   choice: { options: [1, 2, 3] }
-  // });
+  let { position, color, visible, interval, clickMe } = useControls("Sphere", {
+    position: {
+      value: {
+        x: -2,
+        y: 0
+      },
+      step: 0.01,
+      joystick: "invertY"
+    },
+    color: "#ff0000",
+    visible: true,
+    interval: {
+      min: 0,
+      max: 10,
+      value: [3, 5]
+    },
+    clickMe: button(test),
+    choice: { options: [1, 2, 3] }
+  });
 
-  // let { scale } = useControls("Cube", {
-  //   scale: {
-  //     value: 1.5,
-  //     step: 0.01,
-  //     min: 0,
-  //     max: 5
-  //   }
-  // });
+  let { scale } = useControls("Cube", {
+    scale: {
+      value: 1.5,
+      step: 0.01,
+      min: 0,
+      max: 5
+    }
+  });
 
   let { perfVisible } = useControls("Perf", {
     perfVisible: false
@@ -66,7 +66,7 @@ export default function Experience() {
       <OrbitControls makeDefault />
       <color args={["#000000"]} attach="background" />
 
-      <Physics debug={true}>
+      <Physics debug={false}>
         <Lights />
         {/* <mesh
           castShadow

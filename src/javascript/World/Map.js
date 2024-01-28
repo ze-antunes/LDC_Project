@@ -3,16 +3,36 @@ import * as THREE from 'three'
 import { RigidBody, CuboidCollider } from '@react-three/rapier'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
+import CSVReader from 'react-csv-reader';
 import { Wars } from '../Components/Wars'
 
 let boxGeometry = new THREE.BoxGeometry(1, 1, 1)
 let floor1Material = new THREE.MeshStandardMaterial({ color: "limegreen" })
+let wallMaterial = new THREE.MeshStandardMaterial({ color: "slategrey" })
 
 function Map() {
+    const [csvData, setCSVData] = useState(null);
+
+    useEffect(() => {
+        let file = "./WW2_LocationData_Clean - GeoBattleData_YZ.csv";
+
+
+        let handleRequest = (data) => {
+            // console.log(data) 
+            setCSVData(data);
+        };
+
+        // ------ Request Data
+        d3.csv(file)
+            .then(handleRequest);
+    }, []);
+
     return (
         <>
             <Countries position={[0, 0, -4]} />
-            <Wars />
+            {csvData && csvData.map((war, index) => {
+                return <Wars key={index} position={[war.long, 0.5, war.lat / 100]}/>
+            })}
         </>
     )
 }
@@ -503,8 +523,9 @@ export function Countries({ position = [0, 0, 0] }) {
                 mesh.castShadow = true;
             });
             return (
-                <RigidBody key={index} type='fixed' colliders='hull' position={[-25, -0.1, -5]} restitution={0.2} friction={0}>
-                    <primitive object={country.scene} scale={[100, 20, 100]} />
+                <RigidBody key={index} type='fixed' colliders='hull' position={[-29, -0.1, -8]} restitution={0.2} friction={0}>
+                    <primitive object={country.scene} scale={[100, 20, 100]} material={wallMaterial} castShadow receiveShadow />
+                    <meshStandardMaterial flatShading color='mediumpurple' />
                 </RigidBody>
             )
         });

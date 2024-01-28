@@ -43,8 +43,8 @@ body,
 
 .controls {
   position: absolute;
-  top: 5%;
-  left: -5%;
+  bottom: 25%;
+  right: -5%;
   width: 25%;
 }
 
@@ -114,4 +114,12 @@ div.tooltip {
 .location-point {
   fill: red;
   opacity: 0;
+}
+
+.svgMap {
+  position: absolute;
+  top: 2%;
+  left: 1%;
+  background: #000000cc;
+  border: 2px solid #ffffff;
 }
