@@ -12,8 +12,8 @@ let floor1Material = new THREE.MeshStandardMaterial({ color: "#1C1C1C" })
 function Floor() {
     return (
         <RigidBody type="fixed" restitution={0.2} friction={0}>
-            <group position={[0, 0, 0]}>
-                <mesh className="floor" geometry={boxGeometry} material={floor1Material} position={[0, -0.1, 0]} scale={[65, 0.2, 35]} castShadow receiveShadow />
+            <group position={[0, 0, 0]} castShadow receiveShadow>
+                <mesh className="floor" geometry={boxGeometry} material={floor1Material} position={[0, -0.1, 0]} scale={[65, 0.2, 35]} />
             </group>
 
             <CuboidCollider

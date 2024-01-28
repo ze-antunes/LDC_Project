@@ -57,7 +57,7 @@ export default function Experience() {
   // });
 
   let { perfVisible } = useControls("Performance", {
-    perfVisible: true
+    perfVisible: false
   });
 
   return (
