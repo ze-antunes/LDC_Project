@@ -534,14 +534,14 @@ export function Countries({ position = [0, 0, 0] }) {
         return fileNames.map((file, index) => {
             let country = useGLTF(file);
             country.scene.children.forEach((mesh) => {
-                mesh.castShadow = true;
+                // mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                mesh.material = new THREE.MeshStandardMaterial({ color: "#555555" })
             });
             return (
-                <group key={index}>
-                    <RigidBody type='fixed' colliders='hull' position={[-29, -0.1, -8]} restitution={0.2} friction={0}>
-                        <primitive object={country.scene} scale={[100, 20, 100]} material={wallMaterial} castShadow receiveShadow />
-                    </RigidBody>
-                </group>
+                <RigidBody key={index} type='fixed' colliders='hull' position={[-29, -0.1, -8]} restitution={0.2} friction={0}>
+                    <primitive object={country.scene} scale={[100, 20, 100]} />
+                </RigidBody>
             )
         });
     }

@@ -7,6 +7,8 @@ export default function Lights()
     useFrame((state) => {
         light.current.position.z = state.camera.position.z - 3
         light.current.target.position.z = state.camera.position.z - 4
+        light.current.position.x = state.camera.position.x
+        light.current.target.position.x = state.camera.position.x - 4
         light.current.target.updateMatrixWorld()
     })
 
@@ -14,7 +16,7 @@ export default function Lights()
         <directionalLight
             ref={light}
             castShadow
-            position={ [ 4, 4, 1 ] }
+            position={ [ 4, 5, 1 ] }
             intensity={ 4.5 }
             shadow-mapSize={ [ 1024, 1024 ] }
             shadow-camera-near={ 1 }
