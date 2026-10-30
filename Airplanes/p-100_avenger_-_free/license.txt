@@ -1,0 +1,11 @@
+Model Information:
+* title:	P-100 Avenger - FREE
+* source:	https://sketchfab.com/3d-models/p-100-avenger-free-95fbb89722cc4593a9e7334b22bc2209
+* author:	NETRUNNER_pl (https://sketchfab.com/NETRUNNER_pl)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "P-100 Avenger - FREE" (https://sketchfab.com/3d-models/p-100-avenger-free-95fbb89722cc4593a9e7334b22bc2209) by NETRUNNER_pl (https://sketchfab.com/NETRUNNER_pl) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

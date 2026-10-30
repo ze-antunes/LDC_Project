@@ -1,0 +1,11 @@
+Model Information:
+* title:	Zirkus Rosarius Spitfire
+* source:	https://sketchfab.com/3d-models/zirkus-rosarius-spitfire-860dadc02e00404f915eac5ea54b3e19
+* author:	A ∆ R 0 N (https://sketchfab.com/valartys)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Zirkus Rosarius Spitfire" (https://sketchfab.com/3d-models/zirkus-rosarius-spitfire-860dadc02e00404f915eac5ea54b3e19) by A ∆ R 0 N (https://sketchfab.com/valartys) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
