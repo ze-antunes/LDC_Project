@@ -1,38 +1,46 @@
 import { Color, Vector3 } from "three";
 
 export const StyleShader = {
-    uniforms: {
-        colorMap: {
-            value: [
-                new Color('#427062'),
-                new Color('#33594e'),
-                new Color('#234549'),
-                new Color('#1e363f'),
-            ]
-        },
-        brightnessThresholds: {
-            value: [0.6, 0.35, 0.001]
-        },
-        lightPosition: {
-            value: new Vector3(15, 15, 15),
-        }
+  uniforms: {
+    colorMap: {
+      value: [
+        new Color("#427062"),
+        new Color("#33594e"),
+        new Color("#234549"),
+        new Color("#1e363f"),
+      ],
     },
-    vertexShader: /* glsl */ `
+    brightnessThresholds: {
+      value: [0.6, 0.35, 0.001],
+    },
+    lightPosition: {
+      value: new Vector3(15, 15, 15),
+    },
+  },
+  vertexShader: /* glsl */ `
         // Set the precision for data types used in this shader
         precision highp float;
         precision highp int;
 
         varying vec3 vNormal;
         varying vec3 vPosition;
+        #include <fog_pars_vertex>
 
         void main() {
-            vNormal = normal;
-            vPosition = position;
-
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            vec4 localPosition = vec4(position, 1.0);
+            vec3 localNormal = normal;
+            #ifdef USE_INSTANCING
+              localPosition = instanceMatrix * localPosition;
+              localNormal = mat3(instanceMatrix) * localNormal;
+            #endif
+            vNormal = normalize(mat3(modelMatrix) * localNormal);
+            vPosition = (modelMatrix * localPosition).xyz;
+            vec4 mvPosition=viewMatrix*vec4(vPosition,1.0);
+            gl_Position=projectionMatrix*mvPosition;
+            #include <fog_vertex>
         }
     `,
-    fragmentShader: /* glsl */ `
+  fragmentShader: /* glsl */ `
         precision highp float;
         precision highp int;
 
@@ -46,10 +54,11 @@ export const StyleShader = {
         // variables passed from vertex to fragment shader
         varying vec3 vNormal;
         varying vec3 vPosition;
+        #include <fog_pars_fragment>
 
         void main() {
-            vec3 worldPosition = (modelMatrix * vec4(vPosition, 1.0)).xyz;
-            vec3 worldNormal = normalize(vec3(modelMatrix * vec4(vNormal, 0.0)));
+            vec3 worldPosition = vPosition;
+            vec3 worldNormal = normalize(vNormal);
             vec3 lightVector = normalize(lightPosition - worldPosition);
             float brightness = dot(worldNormal, lightVector);
 
@@ -65,6 +74,7 @@ export const StyleShader = {
                 final = vec4(colorMap[3], 1);
 
             gl_FragColor = vec4(final);
+            #include <fog_fragment>
         }
     `,
-}
+};

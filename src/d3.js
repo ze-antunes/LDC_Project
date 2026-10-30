@@ -1,6 +1,9 @@
+import * as d3 from 'd3';
+import * as topojson from 'topojson-client';
+import battleDataUrl from './WW2_LocationData_Clean - GeoBattleData_YZ.csv?url';
 let locationData;
 let locations;
-let file = "./WW2_LocationData_Clean - GeoBattleData_YZ.csv";
+let file = battleDataUrl;
 
 let widthMap = window.innerWidth * 0.25,
     heightMap = window.innerHeight * 0.3;

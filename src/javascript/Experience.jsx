@@ -1,92 +1,48 @@
-import {
-  Sky,
-  Lightformer,
-  Environment,
-  OrbitControls
-} from "@react-three/drei";
-import { useControls, button } from "leva";
-import { Perf } from "r3f-perf";
-import { Physics } from "@react-three/rapier";
-import Lights from "./World/Lights";
-import Floor from "./World/Floor";
-import { Level } from "./Components/Level";
-import Player from "./Components/Player";
-import useGame from "./stores/useGame";
+import { useEffect, useRef } from "react";
+import { OrbitControls } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
 import Map from "./World/Map";
-
+import Player from "./Components/Player";
+import { useExplorer } from "./stores/useExplorer";
 export default function Experience() {
-  let blocksCount = useGame((state) => {
-    return state.blocksCount;
-  });
-  let blockSeed = useGame((state) => {
-    return state.blockSeed;
-  });
-
-  // let test = () => {
-  //   console.log("tick");
-  //   console.log("tack");
-  // };
-
-  // let { position, color, visible, interval, clickMe } = useControls("Sphere", {
-  //   position: {
-  //     value: {
-  //       x: -2,
-  //       y: 0
-  //     },
-  //     step: 0.01,
-  //     joystick: "invertY"
-  //   },
-  //   color: "#ff0000",
-  //   visible: true,
-  //   interval: {
-  //     min: 0,
-  //     max: 10,
-  //     value: [3, 5]
-  //   },
-  //   clickMe: button(test),
-  //   choice: { options: [1, 2, 3] }
-  // });
-
-  // let { scale } = useControls("Cube", {
-  //   scale: {
-  //     value: 1.5,
-  //     step: 0.01,
-  //     min: 0,
-  //     max: 5
-  //   }
-  // });
-
-  let { perfVisible } = useControls("Performance", {
-    perfVisible: false
-  });
-
+  const mode = useExplorer((s) => s.cameraMode),
+    distance = useExplorer((s) => s.viewDistance);
+  const camera = useThree((s) => s.camera),
+    controls = useRef();
+  useEffect(() => {
+    camera.clearViewOffset();
+    if (mode === "overview") {
+      const t = useExplorer.getState().telemetry;
+      camera.position.set(t.x, 160, t.z + 96);
+      camera.lookAt(t.x, 0, t.z);
+      if (controls.current) {
+        controls.current.target.set(t.x, 0, t.z);
+        controls.current.update();
+      }
+    }
+  }, [mode, camera]);
   return (
     <>
-      {perfVisible ? <Perf position="top-left" /> : null}
-      <OrbitControls makeDefault />
-      <color args={["#000000"]} attach="background" />
-
-      <Physics debug={false}>
-        <Lights />
-        {/* <mesh
-          castShadow
-          position={[position.x, position.y, 0]}
-          visible={visible}
-        >
-          <sphereGeometry />
-          <meshStandardMaterial color={color} />
-        </mesh>
-
-        <mesh position-x={2} scale={scale}>
-          <boxGeometry />
-          <meshStandardMaterial color="mediumpurple" />
-        </mesh> */}
-
-        <Level count={blocksCount} seed={blockSeed} />
-        <Player />
-        <Floor />
-        <Map />
-      </Physics>
+      <color
+        attach="background"
+        args={[mode === "flight" ? "#1c1c1c" : "#000000"]}
+      />
+      {mode === "flight" && (
+        <fog attach="fog" args={["#1c1c1c", distance * 0.35, distance]} />
+      )}
+      <ambientLight intensity={1.8} />
+      <directionalLight position={[35, 60, 25]} intensity={2.4} />
+      {mode === "overview" && (
+        <OrbitControls
+          ref={controls}
+          makeDefault
+          minDistance={8}
+          maxDistance={825}
+          maxPolarAngle={Math.PI / 2.1}
+        />
+      )}
+      <Map />
+      <Player />
     </>
   );
 }
